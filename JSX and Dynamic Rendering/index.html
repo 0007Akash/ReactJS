@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JSX and Babel</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      //Simple JSX Element
+      let element = <p>Seize the day1</p>;
+      let root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(element);
+
+      //Dynamic Content in JSX
+      let text = "Seize the day2";
+      // used js variable inside jsx code
+      let para = <p>{text}</p>;
+      let root2 = ReactDOM.createRoot(document.getElementById("root"));
+      root2.render(para);
+
+      //Conditional Rendering in JSX
+      let boolVal = false;
+      // sets the value of the p tag based on boolean value or variable
+      let ConditionalRender = <p>{boolVal ? element : para}</p>;
+      let root3 = ReactDOM.createRoot(document.getElementById("root"));
+      root3.render(ConditionalRender);
+    </script>
+  </body>
+</html>
