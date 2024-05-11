@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Title of the page -->
+    <title>Greeting Component</title>
+  </head>
+  <body>
+    <!-- Root element where React will render -->
+    <div id="root"></div>
+  </body>
+  <!-- Scripts for React and Babel -->
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    // React component for displaying a greeting message
+    function Greeting({ message, name }) {
+      return (
+        <>
+          <p>
+            {message}, {name}
+          </p>
+        </>
+      );
+    }
+
+    // Main App component
+    function App() {
+      return (
+        <>
+          <Greeting message={"Hello"} name={"Akash Yadav"} />
+          <Greeting message={"Hi"} name={"Shivam Upadhyay"} />
+          <Greeting message={"Hey"} name={"Monu Yadav"} />
+        </>
+      );
+    }
+
+    // Render the App component to the root element
+    const reactRoot = ReactDOM.createRoot(document.getElementById("root"));
+    reactRoot.render(<App />);
+  </script>
+</html>
