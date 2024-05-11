@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Metadata -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Title of the page -->
+    <title>Dynamic List Rendering</title>
+  </head>
+  <body>
+    <!-- Root element where React will render -->
+    <div id="root"></div>
+    <!-- React and Babel scripts -->
+    <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+    <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      // Define the ItemList component
+      function ItemList({ items }) {
+        return (
+          <>
+            {items.length > 0 ? ( // Check if items array is not empty
+              <ul>
+                {/* Render each item in the array as a list item */}
+                {items.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No items found</p> // Display "No items found" if items array is empty
+            )}
+          </>
+        );
+      }
+
+      // Define the main App component
+      function App() {
+        return (
+          <>
+            {/* Render two instances of ItemList component with different arrays */}
+            <ItemList items={["Apple", "Banana", "Cherry"]} />
+            <ItemList items={[]} />
+          </>
+        );
+      }
+
+      // Render the App component to the root element
+      const reactRoot = ReactDOM.createRoot(document.getElementById("root"));
+      reactRoot.render(<App />);
+    </script>
+  </body>
+</html>
