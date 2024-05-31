@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Adding cars using state hook</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function App() {
+      const [cars, setCars] = React.useState([]);
+      const [year, setYear] = React.useState(new Date().getFullYear());
+      const [model, setModel] = React.useState("");
+      const [maker, setMaker] = React.useState("");
+
+      function handleAddCars() {
+        const newCar = { year: year, model: model, manufacturer: maker };
+
+        setCars([...cars, newCar]);
+        setMaker("");
+        setModel("");
+        setYear(new Date().getFullYear());
+      }
+
+      function handleRemoveCar(index) {
+        setCars(cars.filter((_, i) => i !== index));
+      }
+
+      function handleCarYear() {
+        setYear(event.target.value);
+      }
+
+      function handleCarModel() {
+        setModel(event.target.value);
+      }
+
+      function handleCarManufacturer() {
+        setMaker(event.target.value);
+      }
+
+      return (
+        <div>
+          <h1>Adding Cars Using State Hooks</h1>
+          <ul>
+            {cars.map((car, index) => (
+              <li key={index}>
+                {car.year} {car.manufacturer} {car.model}
+                <button onClick={() => handleRemoveCar(index)}>
+                  Remove Car
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <input type="number" value={year} onChange={handleCarYear} />
+          <br />
+          <input
+            type="text"
+            value={model}
+            placeholder={"Enter model of car"}
+            onChange={handleCarModel}
+          />
+          <br />
+          <input
+            type="text"
+            value={maker}
+            placeholder={"Enter manufacturer of car"}
+            onChange={handleCarManufacturer}
+          />
+          <br />
+          <button onClick={handleAddCars}>Add Cars</button>
+        </div>
+      );
+    }
+    const reactRoot = ReactDOM.createRoot(document.getElementById("root"));
+    reactRoot.render(<App />);
+  </script>
+</html>

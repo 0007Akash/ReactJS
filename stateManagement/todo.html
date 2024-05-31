@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Application</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #96b4fe;
+        color: #fff;
+      }
+      .container {
+        width: 500px;
+        text-align: center;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        background-color: #2e4994;
+        border-radius: 20px;
+      }
+      h1,
+      input {
+        margin: 0 0 20px 0;
+      }
+      input {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px;
+        border: none;
+        outline: none;
+        border-radius: 25%;
+        text-align: center;
+      }
+      .addBtn {
+        font-size: 24px;
+        padding: 10px 20px;
+        border-radius: 50%;
+        border: none;
+        margin-bottom: 20px;
+        background-color: #e40df1;
+        color: #fff;
+        cursor: pointer;
+      }
+      .addBtn:hover {
+        background-color: #e056e7;
+      }
+      h2 {
+        margin: 20px;
+      }
+      .flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        width: 100%;
+        gap: 10px;
+      }
+      .taskData {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px 20px;
+        background-color: #051956;
+        border-radius: 15px;
+        margin: 10px 0;
+      }
+
+      .completeBtn {
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 15px;
+      }
+      .tabBTn {
+        font-size: 16px;
+        padding: 5px 10px;
+        margin: 10px 10px 0 10px;
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        background-color: #051956;
+        color: #fff;
+      }
+      .tabBTn:hover {
+        background-color: #fff;
+        color: #051956;
+      }
+      .active_tab {
+        background-color: #fff;
+        color: #051956;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function Todo() {
+      // State to store all tasks
+      const [allTask, setAllTask] = React.useState([]);
+      // State to control the display mode (all, active, completed)
+      const [display, setDisplay] = React.useState("active");
+      // State to store active tasks
+      const [tasks, setTasks] = React.useState([]);
+      // State to store the new task input
+      const [newTask, setNewTask] = React.useState("");
+      // State to store completed tasks
+      const [complete, setComplete] = React.useState([]);
+
+      // Handle input change and update newTask state
+      function handleChange(event) {
+        setNewTask(event.target.value);
+      }
+
+      // Add new task to the list of all tasks and active tasks
+      function addTask() {
+        setAllTask([...allTask, newTask]);
+        setTasks([...tasks, newTask]);
+      }
+
+      // Mark a task as completed and move it to the completed list
+      function completed(e, index) {
+        const cTask = tasks[index];
+        setComplete((prev) => [...prev, cTask]);
+        setTasks(tasks.filter((_, i) => i !== index));
+      }
+
+      // Display all tasks
+      function showAllTask() {
+        setDisplay("all");
+      }
+
+      // Display only active tasks
+      function active() {
+        setDisplay("active");
+      }
+
+      // Display only completed tasks
+      function completeTask() {
+        setDisplay("completed");
+      }
+
+      return (
+        <>
+          <div className={"container"}>
+            <h1>TODO App</h1>
+            <input
+              type="text"
+              onChange={handleChange} // Bind handleChange to input change event
+              placeholder={"Write tasks here"}
+            />
+            <button className={"addBtn"} onClick={addTask}>
+              +
+            </button>
+            <hr />
+            <div className={"btns"}>
+              {/* Tab buttons to switch between task views */}
+              <button
+                className={`tabBTn ${display === "all" ? "active_tab" : ""}`}
+                onClick={showAllTask}
+              >
+                All Task
+              </button>
+              <button
+                className={`tabBTn ${display === "active" ? "active_tab" : ""}`}
+                onClick={active}
+              >
+                Active Task
+              </button>
+              <button
+                className={`tabBTn ${
+                  display === "completed" ? "active_tab" : ""
+                }`}
+                onClick={completeTask}
+              >
+                Completed Task
+              </button>
+            </div>
+
+            {/* Conditional rendering based on display state */}
+            {display === "all"
+              ? allTask.map((el, i) => (
+                  <div key={i} className={"flex"}>
+                    <h3 className={"taskData"}>{el}</h3>
+                  </div>
+                ))
+              : display === "active"
+              ? tasks.map((task, index) => (
+                  <div key={index} className={"flex"}>
+                    <h3 className={"taskData"}>{task}</h3>
+                    <button
+                      className={"completeBtn"}
+                      onClick={(e) => completed(e, index)} // Bind completed function to button click event
+                    >
+                      Completed
+                    </button>
+                  </div>
+                ))
+              : complete.map((task, index) => (
+                  <div key={index} className={"flex"}>
+                    <h3 className={"taskData"}>{task}</h3>
+                  </div>
+                ))}
+          </div>
+        </>
+      );
+    }
+
+    // Create the root element and render the Todo component
+    const reactRoot = ReactDOM.createRoot(document.getElementById("root"));
+    reactRoot.render(<Todo />);
+  </script>
+</html>

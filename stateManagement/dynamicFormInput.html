@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dynamic Hobbies Form</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      input {
+        width: 500px;
+        font-size: 16px;
+        padding: 10px 10px;
+        border: none;
+        box-shadow: 0 0 14px rgba(0, 0, 0, 1);
+        margin: 15px 20px 15px 0px;
+        border-radius: 10px;
+        outline: none;
+      }
+      button {
+        font-size: 16px;
+        padding: 10px;
+        margin: 0px 20px 0 0;
+        background: none;
+        outline: none;
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .addButton {
+        background-color: green;
+        color: #fff;
+      }
+      .removeButton {
+        background-color: red;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function DynamicForm() {
+      // State to manage form fields
+      const [formFields, setFormFields] = React.useState([{ hobby: "" }]);
+
+      // Function to handle change in input fields
+      function handleChange(event, index) {
+        let data = [...formFields];
+        data[index][event.target.name] = event.target.value;
+        setFormFields(data);
+      }
+
+      // Function to handle form submission
+      function onSubmit(e) {
+        e.preventDefault();
+        let arr = [];
+        formFields.map((form) => {
+          arr.push(form.hobby);
+        });
+        console.log(arr);
+      }
+
+      // Function to add a new input field
+      function addInput() {
+        setFormFields([...formFields, { hobby: "" }]);
+      }
+
+      // Function to remove an input field
+      function handleRemove(index) {
+        setFormFields(formFields.filter((_, i) => i !== index));
+      }
+
+      return (
+        <div>
+          {/* Render input fields */}
+          {formFields.map((hobby, index) => {
+            return (
+              <div key={index}>
+                <input
+                  type="text"
+                  name="hobby"
+                  value={hobby.hobby}
+                  placeholder={"Enter hobbies"}
+                  onChange={(event) => handleChange(event, index)}
+                />
+                {/* Render remove button for additional input fields */}
+                {index > 0 && (
+                  <button
+                    onClick={() => handleRemove(index)}
+                    className={"removeButton"}
+                  >
+                    X
+                  </button>
+                )}
+              </div>
+            );
+          })}
+
+          {/* Button to add new input field */}
+          <button onClick={addInput} className={"addButton"}>
+            +
+          </button>
+          {/* Button to submit form */}
+          <button onClick={(e) => onSubmit(e)}>Submit</button>
+        </div>
+      );
+    }
+
+    // Render the DynamicForm component
+    const reactRoot = ReactDOM.createRoot(document.getElementById("root"));
+    reactRoot.render(<DynamicForm />);
+  </script>
+</html>

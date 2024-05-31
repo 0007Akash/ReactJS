@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(rgb(137, 137, 206), rgb(52, 52, 236));
+        text-align: center;
+      }
+      .container {
+        width: 500px;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 14px 28px,
+          rgba(0, 0, 0, 0.3) 0px 10px 10px;
+        border-radius: 10px;
+        padding: 20px 40px;
+        background-color: #fff;
+      }
+      h1 {
+        margin: 5px 0 10px 0px;
+      }
+      h2 {
+        text-align: start;
+        margin: 10px 0 10px 0px;
+      }
+      hr {
+        border: none;
+        outline: none;
+        border: 0.5px solid rgba(0, 0, 0, 0.67);
+      }
+      li {
+        list-style: none;
+        width: 100%;
+        border: 1px solid;
+        font-size: 18px;
+        text-align: start;
+        padding: 5px 15px;
+        margin: 10px 0 10px 0px;
+        border-radius: 8px;
+      }
+      button {
+        font-size: 16px;
+        padding: 5px 20px;
+        outline: none;
+        border: none;
+        background-color: rgb(113, 113, 219);
+        color: #fff;
+        border-radius: 10px;
+        margin: 10px 0 10px 0px;
+      }
+      .container .correct {
+        background-color: rgba(167, 226, 167, 0.86);
+        border-color: rgb(90, 213, 90);
+      }
+      .container .wrong {
+        background-color: rgba(233, 175, 175, 0.838);
+        border-color: rgb(213, 70, 70);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function Quiz() {
+      // Quiz data with questions and answers
+      let data = [
+        {
+          question:
+            "Which of the following Indian dishes is often referred to as the 'king of street food'?",
+          option1: "Vada Pav",
+          option2: "Pani Puri",
+          option3: "Samosa",
+          option4: "Dosa",
+          ans: "Vada Pav",
+        },
+        {
+          question: "What is the nickname of the Indian city Bengaluru?",
+          option1: "Pink City",
+          option2: "Garden City",
+          option3: "City of Joy",
+          option4: "City of Nawabs",
+          ans: "Garden City",
+        },
+        {
+          question:
+            "Which Indian festival is known as the 'Festival of Lights'?",
+          option1: "Holi",
+          option2: "Diwali",
+          option3: "Eid",
+          option4: "Christmas",
+          ans: "Diwali",
+        },
+        {
+          question:
+            "In which Indian city would you find the famous monument 'Charminar'?",
+          option1: "Mumbai",
+          option2: "Kolkata",
+          option3: "Hyderabad",
+          option4: "Chennai",
+          ans: "Hyderabad",
+        },
+        {
+          question:
+            "Which Indian state is famous for its one-horned rhinoceros?",
+          option1: "Rajasthan",
+          option2: "Assam",
+          option3: "Gujarat",
+          option4: "Kerala",
+          ans: "Assam",
+        },
+      ];
+
+      // State to track the current question index
+      let [index, setIndex] = React.useState(0);
+      // State to store the current question
+      const [question, setQuestion] = React.useState(data[index]);
+      // State to track the user's score
+      const [score, setScore] = React.useState(0);
+      // State to determine if the quiz is completed
+      const [result, setResult] = React.useState(false);
+      // State to lock further interactions after an answer is chosen
+      const [locker, setLocker] = React.useState(false);
+
+      // Function to check the answer
+      function checkAns(e, ans) {
+        if (locker === false) {
+          if (question.ans === ans) {
+            e.target.classList.add("correct");
+            setScore(score + 1);
+            setLocker(true);
+          } else {
+            e.target.classList.add("wrong");
+            setLocker(true);
+          }
+        }
+      }
+
+      // Function to handle the next question
+      function handleClick() {
+        if (locker === true) {
+          if (index === data.length - 1) {
+            setResult(true);
+          }
+          setIndex(++index);
+          setQuestion(data[index]);
+          setLocker(false);
+          const listItem = document.querySelectorAll("li");
+          listItem.forEach((item) => {
+            item.classList.remove("correct");
+            item.classList.remove("wrong");
+          });
+        }
+      }
+
+      // Function to reset the quiz
+      function reset() {
+        setIndex(0);
+        setQuestion(data[0]);
+        setScore(0);
+        setResult(false);
+      }
+
+      return (
+        <>
+          <div className={"container"}>
+            <h1>Quiz App</h1>
+            <hr />
+            {/* Display result if quiz is completed */}
+            {result == true ? (
+              <>
+                <h2>
+                  Got {score} out of {data.length}
+                </h2>
+                <button onClick={reset}>Reset</button>
+              </>
+            ) : (
+              <>
+                {/* Display current question */}
+                <h2>
+                  {index + 1}. {question.question}
+                </h2>
+                {/* Display options */}
+                <ul>
+                  <li onClick={(e) => checkAns(e, question.option1)}>
+                    {question.option1}
+                  </li>
+                  <li onClick={(e) => checkAns(e, question.option2)}>
+                    {question.option2}
+                  </li>
+                  <li onClick={(e) => checkAns(e, question.option3)}>
+                    {question.option3}
+                  </li>
+                  <li onClick={(e) => checkAns(e, question.option4)}>
+                    {question.option4}
+                  </li>
+                </ul>
+                {/* Button to move to the next question */}
+                <button onClick={handleClick}>NEXT</button>
+                {/* Display progress */}
+                <p>
+                  {index + 1} of {data.length} questions
+                </p>
+              </>
+            )}
+          </div>
+        </>
+      );
+    }
+
+    // Create the root element and render the Quiz component
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<Quiz />);
+  </script>
+</html>
